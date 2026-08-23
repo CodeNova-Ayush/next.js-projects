@@ -1,25 +1,64 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useBookmarks } from '@/context/BookmarkContext';
-import { projects } from '@/data/projects';
+import { projects, formatStarCount } from '@/data/projects';
 
 export default function SavedProjectsPage() {
   const { savedIds, removeBookmark } = useBookmarks();
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const savedProjects = projects.filter((project) => savedIds.includes(project.id));
+
+  const handleClearAll = () => {
+    savedProjects.forEach((p) => removeBookmark(p.id));
+    setShowConfirm(false);
+  };
 
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="border-b border-gray-200 pb-4">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
-          My Saved Projects
-        </h1>
-        <p className="text-sm text-gray-600 mt-1">
-          Projects you have bookmarked for later exploration.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 pb-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
+            My Saved Projects
+          </h1>
+          <p className="text-sm text-gray-600 mt-1">
+            Projects you have bookmarked for later exploration.
+          </p>
+        </div>
+
+        {savedProjects.length > 0 && (
+          <div>
+            {showConfirm ? (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleClearAll}
+                  className="text-xs bg-red-600 text-white px-3 py-1.5 rounded-md hover:bg-red-700 font-medium"
+                >
+                  Confirm Clear
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm(false)}
+                  className="text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-md hover:bg-gray-200 font-medium"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setShowConfirm(true)}
+                className="text-xs text-red-600 border border-red-200 hover:bg-red-50 px-3 py-1.5 rounded-md font-medium"
+              >
+                Clear All Bookmarks
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {savedProjects.length > 0 ? (
@@ -39,8 +78,8 @@ export default function SavedProjectsPage() {
                     <span className="font-medium bg-gray-100 px-2 py-0.5 rounded text-gray-700">
                       {project.domain}
                     </span>
-                    <span className="font-medium text-green-700">
-                      ★ {project.stars.toLocaleString()}
+                    <span className="font-medium text-gray-600">
+                      ★ {formatStarCount(project.stars)} stars
                     </span>
                   </div>
 
