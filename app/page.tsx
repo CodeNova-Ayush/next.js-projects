@@ -66,26 +66,38 @@ export default function HomePage() {
           <div className="text-xs text-gray-500">Beginner Friendly</div>
         </div>
         <div className="bg-white border border-gray-200 rounded-lg p-3">
-          <div className="text-xl font-bold text-blue-600">6</div>
+          <div className="text-xl font-bold text-blue-600">{domains.length - 1}</div>
           <div className="text-xs text-gray-500">Domains</div>
         </div>
       </div>
 
       {/* Search and Filters Section */}
       <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm space-y-4">
-        {/* Search Input */}
+        {/* Search Input with Clear Button */}
         <div>
           <label htmlFor="search" className="block text-xs font-semibold text-gray-700 mb-1">
             Search Projects
           </label>
-          <input
-            id="search"
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name, technology (e.g. React, Python), or description..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:bg-white bg-gray-50 placeholder-gray-400"
-          />
+          <div className="relative">
+            <input
+              id="search"
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by name, technology (e.g. React, Python), or description..."
+              className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg text-sm focus:bg-white bg-gray-50 placeholder-gray-400"
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs font-bold"
+                aria-label="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Domain Filter Pills */}
@@ -172,10 +184,11 @@ export default function HomePage() {
         </div>
       ) : (
         <div className="bg-white border border-gray-200 rounded-xl p-10 text-center space-y-3">
+          <div className="text-2xl">🔍</div>
           <p className="text-gray-700 font-medium">No projects found matching your filters.</p>
           <button
             onClick={handleReset}
-            className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-700"
+            className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-700 font-medium"
           >
             Clear Filters
           </button>
