@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
+// Interface defining the context functions and state
 interface BookmarkContextType {
   savedIds: number[];
   isBookmarked: (id: number) => boolean;
@@ -15,7 +16,7 @@ export function BookmarkProvider({ children }: { children: React.ReactNode }) {
   const [savedIds, setSavedIds] = useState<number[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load saved bookmarks from localStorage when client mounts
+  // Load saved bookmarks from localStorage when client component mounts
   useEffect(() => {
     try {
       const stored = localStorage.getItem('savedProjects');
@@ -23,20 +24,21 @@ export function BookmarkProvider({ children }: { children: React.ReactNode }) {
         setSavedIds(JSON.parse(stored));
       }
     } catch (error) {
-      console.error('Failed to load saved projects from localStorage', error);
+      console.error('Failed to load saved projects from localStorage:', error);
     }
     setIsLoaded(true);
   }, []);
 
-  // Update localStorage whenever savedIds change
+  // Synchronize state with browser localStorage
   const saveToLocalStorage = (ids: number[]) => {
     try {
       localStorage.setItem('savedProjects', JSON.stringify(ids));
     } catch (error) {
-      console.error('Failed to save projects to localStorage', error);
+      console.error('Failed to save projects to localStorage:', error);
     }
   };
 
+  // Toggle bookmark on/off
   const toggleBookmark = (id: number) => {
     let updated: number[];
     if (savedIds.includes(id)) {
@@ -48,12 +50,14 @@ export function BookmarkProvider({ children }: { children: React.ReactNode }) {
     saveToLocalStorage(updated);
   };
 
+  // Explicitly remove a project by ID
   const removeBookmark = (id: number) => {
     const updated = savedIds.filter((itemId) => itemId !== id);
     setSavedIds(updated);
     saveToLocalStorage(updated);
   };
 
+  // Helper check if project is currently saved
   const isBookmarked = (id: number) => {
     return isLoaded && savedIds.includes(id);
   };
@@ -72,6 +76,7 @@ export function BookmarkProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+// Custom hook to consume the BookmarkContext
 export function useBookmarks() {
   const context = useContext(BookmarkContext);
   if (!context) {
