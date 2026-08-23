@@ -10,34 +10,38 @@ export function Navbar() {
   const { savedIds } = useBookmarks();
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-xs">
       <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold text-gray-900">
+        <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+          <span className="text-xl font-bold text-gray-900 tracking-tight">
             Open Source Explorer
           </span>
         </Link>
 
         {/* Navigation Links */}
-        <nav className="flex items-center gap-6 text-sm font-medium">
+        <nav className="flex items-center gap-4 sm:gap-6 text-sm font-medium">
           <Link
             href="/"
-            className={`transition-colors ${
-              pathname === '/' ? 'text-blue-600 font-semibold' : 'text-gray-600 hover:text-gray-900'
+            className={`px-3 py-1.5 rounded-lg transition-colors ${
+              pathname === '/'
+                ? 'text-blue-600 font-semibold bg-blue-50'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
             }`}
           >
             All Projects
           </Link>
           <Link
             href="/saved"
-            className={`flex items-center gap-1.5 transition-colors ${
-              pathname === '/saved' ? 'text-blue-600 font-semibold' : 'text-gray-600 hover:text-gray-900'
+            className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors ${
+              pathname === '/saved'
+                ? 'text-blue-600 font-semibold bg-blue-50'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
             }`}
           >
             <span>Saved Projects</span>
             {savedIds.length > 0 && (
-              <span className="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full font-semibold">
+              <span className="bg-blue-600 text-white text-xs px-2 py-0.2 rounded-full font-semibold">
                 {savedIds.length}
               </span>
             )}
