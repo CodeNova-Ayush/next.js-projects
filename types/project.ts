@@ -1,3 +1,4 @@
+// Type definition for an open-source project
 export interface Project {
   id: number;
   name: string;
