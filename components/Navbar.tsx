@@ -20,7 +20,7 @@ export function Navbar() {
         </Link>
 
         {/* Navigation Links */}
-        <nav className="flex items-center gap-4 sm:gap-6 text-sm font-medium">
+        <nav className="flex items-center gap-2 sm:gap-4 text-sm font-medium">
           <Link
             href="/"
             className={`px-3 py-1.5 rounded-lg transition-colors ${
@@ -29,7 +29,17 @@ export function Navbar() {
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
             }`}
           >
-            All Projects
+            Home
+          </Link>
+          <Link
+            href="/projects"
+            className={`px-3 py-1.5 rounded-lg transition-colors ${
+              pathname === '/projects'
+                ? 'text-blue-600 font-semibold bg-blue-50'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+            }`}
+          >
+            Projects
           </Link>
           <Link
             href="/saved"
@@ -39,7 +49,7 @@ export function Navbar() {
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
             }`}
           >
-            <span>Saved Projects</span>
+            <span>Saved</span>
             {savedIds.length > 0 && (
               <span className="bg-blue-600 text-white text-xs px-2 py-0.2 rounded-full font-semibold">
                 {savedIds.length}
