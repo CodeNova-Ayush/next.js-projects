@@ -8,6 +8,7 @@ interface BookmarkContextType {
   isBookmarked: (id: number) => boolean;
   toggleBookmark: (id: number) => void;
   removeBookmark: (id: number) => void;
+  clearAllBookmarks: () => void;
 }
 
 const BookmarkContext = createContext<BookmarkContextType | undefined>(undefined);
@@ -57,6 +58,12 @@ export function BookmarkProvider({ children }: { children: React.ReactNode }) {
     saveToLocalStorage(updated);
   };
 
+  // Clear all saved bookmarks
+  const clearAllBookmarks = () => {
+    setSavedIds([]);
+    saveToLocalStorage([]);
+  };
+
   // Helper check if project is currently saved
   const isBookmarked = (id: number) => {
     return isLoaded && savedIds.includes(id);
@@ -69,6 +76,7 @@ export function BookmarkProvider({ children }: { children: React.ReactNode }) {
         isBookmarked,
         toggleBookmark,
         removeBookmark,
+        clearAllBookmarks,
       }}
     >
       {children}

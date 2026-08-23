@@ -6,13 +6,13 @@ import { useBookmarks } from '@/context/BookmarkContext';
 import { projects, formatStarCount } from '@/data/projects';
 
 export default function SavedProjectsPage() {
-  const { savedIds, removeBookmark } = useBookmarks();
+  const { savedIds, removeBookmark, clearAllBookmarks } = useBookmarks();
   const [showConfirm, setShowConfirm] = useState(false);
 
   const savedProjects = projects.filter((project) => savedIds.includes(project.id));
 
   const handleClearAll = () => {
-    savedProjects.forEach((p) => removeBookmark(p.id));
+    clearAllBookmarks();
     setShowConfirm(false);
   };
 
