@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { getProjectById } from '@/data/projects';
+import { getProjectById, formatStarCount } from '@/data/projects';
 import { useBookmarks } from '@/context/BookmarkContext';
 
 export default function ProjectDetailsPage() {
@@ -30,7 +30,7 @@ export default function ProjectDetailsPage() {
   const saved = isBookmarked(project.id);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-4xl mx-auto">
       {/* Back button */}
       <Link
         href="/"
@@ -49,12 +49,12 @@ export default function ProjectDetailsPage() {
                 {project.domain}
               </span>
               <span
-                className={`text-xs font-semibold px-2.5 py-1 rounded ${
+                className={`text-xs font-semibold px-2.5 py-1 rounded border ${
                   project.difficulty === 'Beginner'
-                    ? 'bg-green-100 text-green-800'
+                    ? 'bg-green-50 text-green-700 border-green-200'
                     : project.difficulty === 'Intermediate'
-                    ? 'bg-yellow-100 text-yellow-800'
-                    : 'bg-red-100 text-red-800'
+                    ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                    : 'bg-red-50 text-red-700 border-red-200'
                 }`}
               >
                 {project.difficulty} Level
@@ -72,11 +72,11 @@ export default function ProjectDetailsPage() {
               onClick={() => toggleBookmark(project.id)}
               className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
                 saved
-                  ? 'bg-blue-50 border-blue-300 text-blue-700'
+                  ? 'bg-blue-50 border-blue-300 text-blue-700 hover:bg-blue-100'
                   : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
               }`}
             >
-              {saved ? '✓ Saved' : 'Save Project'}
+              {saved ? '✓ Saved in Bookmarks' : 'Save Project'}
             </button>
             <a
               href={project.githubUrl}
@@ -97,12 +97,12 @@ export default function ProjectDetailsPage() {
           </p>
         </div>
 
-        {/* Metadata Details Table/Grid */}
+        {/* Metadata Details Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-gray-100">
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
             <div className="text-xs text-gray-500 font-medium">GitHub Stars</div>
             <div className="text-lg font-bold text-gray-900 mt-1">
-              ★ {project.stars.toLocaleString()}
+              ★ {project.stars.toLocaleString()} ({formatStarCount(project.stars)})
             </div>
           </div>
 
