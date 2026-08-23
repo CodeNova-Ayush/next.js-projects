@@ -1,27 +1,27 @@
 # Open Source Project Explorer (Assignment 3 - Next.js)
 
-A clean, simple web application built with **Next.js (App Router)** and **React** that allows users to explore, search, filter, and bookmark open-source repositories.
+A clean, beginner-friendly web application built with **Next.js (App Router)** and **React** that allows developers to explore, search, filter, and bookmark open-source repositories.
 
 ---
 
-## What It Does
-- **Explore Projects:** Browse a curated list of open-source projects across different domains (Web Development, Backend, AI/ML, DevOps, Mobile, Tools).
-- **Search & Filter:** Search repositories by name, description, or technology, filter by domain/difficulty, or view beginner-friendly projects only.
-- **Project Details:** View comprehensive information for each repository with a direct link to GitHub (`/projects/[id]`).
-- **Save Bookmarks:** Bookmark projects and persist them locally using `localStorage` (`/saved`).
+## 📌 Project Overview
+- **Explore Projects:** Browse a curated collection of 10 real-world open-source repositories across multiple domains.
+- **Search & Filter:** Instantly filter projects by domain (Web, Backend, AI/ML, DevOps, Mobile, Tools), difficulty (Beginner, Intermediate, Advanced), or beginner-friendly status.
+- **Project Details Page:** Dedicated dynamic route (`/projects/[id]`) with project description, tech stack, star count, and a direct "View on GitHub ↗" button.
+- **Persistent Bookmarks:** Save/bookmark favorite projects with persistent storage using `localStorage` (`/saved`).
 
 ---
 
-## Tech Stack
-- **Next.js 15 (App Router)**
-- **React 19**
-- **JavaScript / TypeScript**
-- **Tailwind CSS** (Clean light theme)
-- **HTML5 LocalStorage**
+## 🛠️ Tech Stack
+- **Framework:** Next.js 15 (App Router)
+- **UI Library:** React 19
+- **Language:** JavaScript / TypeScript
+- **Styling:** Tailwind CSS (Clean light theme)
+- **State & Storage:** React Context API & Browser `localStorage`
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 ```text
 ├── app/
 │   ├── layout.tsx             # Root layout with Navbar, Footer & BookmarkProvider
@@ -30,29 +30,29 @@ A clean, simple web application built with **Next.js (App Router)** and **React*
 │   ├── projects/
 │   │   ├── page.tsx           # Redirects to home (/)
 │   │   └── [id]/
-│   │       └── page.tsx       # Dynamic project details page (/projects/[id])
+│   │       └── page.tsx       # Dynamic project details route (/projects/[id])
 │   └── saved/
 │       └── page.tsx           # Saved / bookmarked projects page (/saved)
 ├── components/
 │   ├── Navbar.tsx             # Simple header with saved counter
 │   └── ProjectCard.tsx        # Reusable project card component
 ├── context/
-│   └── BookmarkContext.tsx    # Simple React context for localStorage state
+│   └── BookmarkContext.tsx    # React Context for localStorage state management
 ├── data/
 │   └── projects.ts            # Local JavaScript array of open-source projects
 ├── types/
-│   └── project.ts             # Project interface
-└── README.md
+│   └── project.ts             # TypeScript interface for Project model
+└── README.md                  # Project documentation
 ```
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/open-source-project-explorer.git
-cd open-source-project-explorer
+git clone https://github.com/CodeNova-Ayush/next.js-projects.git
+cd next.js-projects
 ```
 
 ### 2. Install dependencies
@@ -66,9 +66,16 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+### 4. Build for production
+```bash
+npm run build
+npm start
+```
+
 ---
 
-## What I Learned
-- **Next.js App Router:** Using layouts, server/client components, and dynamic routing (`/projects/[id]`).
-- **React State & Props:** Managing search and filter state with `useState`, passing data via props, using `map()` and `filter()`.
-- **LocalStorage:** Storing and retrieving bookmarked project IDs on the client side so bookmarks persist after page reloads.
+## 💡 Key Concepts Learned
+- **Next.js App Router:** Understanding nested layouts, client vs. server components, and dynamic route parameters (`/projects/[id]`).
+- **React State Management:** Utilizing `useState`, `useEffect`, and React Context (`BookmarkContext`) to share state across pages without prop drilling.
+- **Array Methods:** Filtering and searching datasets using `filter()`, `map()`, and `includes()`.
+- **Client Storage:** Handling `localStorage` safely in Next.js on client mount to avoid hydration mismatch.
