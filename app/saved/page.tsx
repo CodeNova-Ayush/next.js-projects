@@ -1,233 +1,103 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useBookmarks } from '@/context/BookmarkContext';
-import { PROJECTS } from '@/data/projects';
-import { ProjectCard } from '@/components/ProjectCard';
-import { SearchBar } from '@/components/SearchBar';
-import {
-  Bookmark,
-  BookmarkX,
-  Compass,
-  Download,
-  Trash2,
-  Share2,
-  Sparkles,
-  ArrowRight,
-  ExternalLink,
-  Layers,
-  FolderGit2,
-} from 'lucide-react';
+import { projects } from '@/data/projects';
 
 export default function SavedProjectsPage() {
-  const { savedIds, isLoaded, clearAllBookmarks } = useBookmarks();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [confirmClear, setConfirmClear] = useState(false);
+  const { savedIds, removeBookmark } = useBookmarks();
 
-  // Retrieve project objects for saved IDs
-  const savedProjects = useMemo(() => {
-    return PROJECTS.filter((p) => savedIds.includes(p.id));
-  }, [savedIds]);
-
-  // Filter saved projects if user uses search inside saved page
-  const filteredSaved = useMemo(() => {
-    if (!searchQuery.trim()) return savedProjects;
-    const q = searchQuery.toLowerCase();
-    return savedProjects.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q) ||
-        p.domain.toLowerCase().includes(q) ||
-        p.technologies.some((t) => t.toLowerCase().includes(q))
-    );
-  }, [savedProjects, searchQuery]);
-
-  // Export saved list as Markdown
-  const handleExportMarkdown = () => {
-    const lines = [
-      '# My Bookmarked Open Source Projects',
-      '',
-      `Generated from Open Source Explorer on ${new Date().toLocaleDateString()}`,
-      '',
-      ...savedProjects.map(
-        (p) =>
-          `- [ ] **[${p.name}](${p.githubUrl})** (${p.domain}, ${p.difficulty})\n  - *${p.tagline}*\n  - Technologies: ${p.technologies.join(', ')}\n  - Good First Issues: ${p.goodFirstIssuesUrl || 'N/A'}`
-      ),
-    ];
-    const blob = new Blob([lines.join('\n')], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `bookmarked-projects-${new Date().toISOString().split('T')[0]}.md`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  if (!isLoaded) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center text-slate-400">
-        Loading saved projects from storage...
-      </div>
-    );
-  }
+  const savedProjects = projects.filter((project) => savedIds.includes(project.id));
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-8">
-      {/* Header section */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-800/80 pb-6">
-        <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-400">
-            <Bookmark className="w-4 h-4" />
-            <span>Personal Collection</span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-100 tracking-tight">
-            My Saved Projects
-          </h1>
-          <p className="text-sm sm:text-base text-slate-400 max-w-xl leading-relaxed">
-            Repositories you have bookmarked for exploration, learning, or future open-source contributions.
-          </p>
-        </div>
-
-        {/* Action buttons (Export / Clear) */}
-        {savedProjects.length > 0 && (
-          <div className="flex items-center gap-3 shrink-0">
-            <button
-              onClick={handleExportMarkdown}
-              type="button"
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium bg-slate-900 text-slate-300 border border-slate-800 hover:text-white hover:bg-slate-800 transition-colors"
-              title="Download Markdown checklist"
-            >
-              <Download className="w-4 h-4 text-indigo-400" />
-              <span>Export List</span>
-            </button>
-
-            {confirmClear ? (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => {
-                    clearAllBookmarks();
-                    setConfirmClear(false);
-                  }}
-                  type="button"
-                  className="px-3 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-sm transition-colors"
-                >
-                  Confirm Clear
-                </button>
-                <button
-                  onClick={() => setConfirmClear(false)}
-                  type="button"
-                  className="px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-200"
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setConfirmClear(true)}
-                type="button"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium text-rose-400 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 transition-colors"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Clear All</span>
-              </button>
-            )}
-          </div>
-        )}
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="border-b border-gray-200 pb-4">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
+          My Saved Projects
+        </h1>
+        <p className="text-sm text-gray-600 mt-1">
+          Projects you have bookmarked for later exploration.
+        </p>
       </div>
 
       {savedProjects.length > 0 ? (
-        <div className="space-y-6">
-          {/* Search within saved list if more than 3 */}
-          {savedProjects.length > 2 && (
-            <div className="max-w-md">
-              <SearchBar
-                value={searchQuery}
-                onChange={setSearchQuery}
-                placeholder="Filter saved projects..."
-              />
-            </div>
-          )}
+        <div className="space-y-4">
+          <p className="text-xs text-gray-500 font-medium">
+            You have {savedProjects.length} saved {savedProjects.length === 1 ? 'project' : 'projects'}.
+          </p>
 
-          {/* Saved count stats bar */}
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>
-              Showing <strong className="text-indigo-400">{filteredSaved.length}</strong> of{' '}
-              <strong className="text-slate-300">{savedProjects.length}</strong> saved projects
-            </span>
-            <span className="text-slate-500">Synced to LocalStorage</span>
-          </div>
-
-          {/* Grid of Saved Projects */}
-          {filteredSaved.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredSaved.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-            </div>
-          ) : (
-            <div className="p-12 text-center rounded-3xl bg-slate-900/40 border border-slate-800/80 max-w-md mx-auto space-y-3">
-              <p className="text-sm font-semibold text-slate-300">
-                No saved projects match &quot;{searchQuery}&quot;
-              </p>
-              <button
-                onClick={() => setSearchQuery('')}
-                className="text-xs text-indigo-400 hover:text-indigo-300 underline"
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {savedProjects.map((project) => (
+              <div
+                key={project.id}
+                className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col justify-between"
               >
-                Clear search query
-              </button>
-            </div>
-          )}
+                <div>
+                  <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+                    <span className="font-medium bg-gray-100 px-2 py-0.5 rounded text-gray-700">
+                      {project.domain}
+                    </span>
+                    <span className="font-medium text-green-700">
+                      ★ {project.stars.toLocaleString()}
+                    </span>
+                  </div>
+
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">
+                    {project.name}
+                  </h3>
+                  <p className="text-xs text-gray-600 line-clamp-2 mb-3">
+                    {project.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-1 mb-4">
+                    {project.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className="text-xs bg-gray-50 text-gray-700 border border-gray-200 px-2 py-0.5 rounded"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
+                  <Link
+                    href={`/projects/${project.id}`}
+                    className="flex-1 text-center text-xs font-semibold bg-gray-900 text-white py-2 px-3 rounded-lg hover:bg-gray-800 transition-colors"
+                  >
+                    View Project
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => removeBookmark(project.id)}
+                    className="text-xs font-semibold text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 border border-red-200 py-2 px-3 rounded-lg transition-colors"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
-        /* Meaningful Empty State */
-        <div className="py-16 sm:py-24 px-6 text-center max-w-lg mx-auto rounded-3xl bg-gradient-to-b from-slate-900/60 to-slate-950/60 border border-slate-800 shadow-2xl space-y-6">
-          <div className="w-20 h-20 mx-auto rounded-3xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 shadow-inner">
-            <BookmarkX className="w-10 h-10" />
-          </div>
-
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-slate-100">No saved projects yet</h2>
-            <p className="text-sm text-slate-400 leading-relaxed max-w-sm mx-auto">
-              Explore open-source projects, discover repositories with good first issues, and bookmark the ones you want to learn from or contribute to.
+        /* Empty State */
+        <div className="bg-white border border-gray-200 rounded-xl p-12 text-center max-w-md mx-auto space-y-4 shadow-sm my-8">
+          <div className="text-3xl">📂</div>
+          <div className="space-y-1">
+            <h2 className="text-lg font-bold text-gray-900">No saved projects yet</h2>
+            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+              Explore open-source projects and bookmark the ones you want to contribute to.
             </p>
           </div>
-
-          <div className="pt-2">
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
-            >
-              <Compass className="w-4 h-4" />
-              <span>Explore Projects</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* Quick inspiration suggestion */}
-          <div className="pt-6 border-t border-slate-800/80">
-            <p className="text-xs text-slate-500 mb-3">Popular starting points:</p>
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              <Link
-                href="/projects?difficulty=Beginner"
-                className="text-xs px-3 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition-colors"
-              >
-                Beginner Friendly Repos
-              </Link>
-              <Link
-                href="/projects?domain=Web+Development"
-                className="text-xs px-3 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition-colors"
-              >
-                Web Development
-              </Link>
-              <Link
-                href="/projects?domain=AI+%26+Machine+Learning"
-                className="text-xs px-3 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition-colors"
-              >
-                AI & LLMs
-              </Link>
-            </div>
-          </div>
+          <Link
+            href="/"
+            className="inline-block bg-blue-600 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Explore Projects
+          </Link>
         </div>
       )}
     </div>

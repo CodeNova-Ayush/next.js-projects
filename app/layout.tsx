@@ -1,34 +1,11 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { BookmarkProvider } from '@/context/BookmarkContext';
 import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
-import { ToastContainer } from '@/components/Toast';
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
 
 export const metadata: Metadata = {
-  title: 'Open Source Project Explorer | Discover & Bookmark Top Repositories',
-  description:
-    'Explore curated open-source repositories across Web Development, AI & Machine Learning, Cloud Backend, DevOps, and Mobile. Filter by beginner-friendliness, difficulty, and technologies.',
-  keywords: [
-    'Open Source',
-    'GitHub',
-    'Good First Issues',
-    'Next.js',
-    'React',
-    'Developer Projects',
-    'Software Engineering',
-  ],
+  title: 'Open Source Project Explorer',
+  description: 'Explore and bookmark open source projects by domain, difficulty, and technologies.',
 };
 
 export default function RootLayout({
@@ -37,13 +14,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}>
-      <body className="min-h-full flex flex-col bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white">
+    <html lang="en">
+      <body className="min-h-screen flex flex-col bg-slate-50 text-gray-900 antialiased">
         <BookmarkProvider>
           <Navbar />
-          <main className="flex-1 flex flex-col">{children}</main>
-          <Footer />
-          <ToastContainer />
+          <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-8">
+            {children}
+          </main>
+          <footer className="bg-white border-t border-gray-200 py-6 text-center text-sm text-gray-500">
+            <p>Open Source Project Explorer • Assignment 3 Next.js</p>
+          </footer>
         </BookmarkProvider>
       </body>
     </html>
