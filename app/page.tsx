@@ -10,7 +10,7 @@ export default function HomePage() {
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
   const [beginnerOnly, setBeginnerOnly] = useState(false);
 
-  const domains = ['All', 'Web Development', 'AI/ML', 'Backend', 'DevOps', 'Mobile', 'Tools'];
+  const domains = ['All', 'Web Development', 'Backend', 'DevOps', 'Mobile'];
   const difficulties = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
   // Filter projects based on search query and selected filters

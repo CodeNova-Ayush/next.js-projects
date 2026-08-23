@@ -1,6 +1,6 @@
 import { Project } from '@/types/project';
 
-// Initial dataset of curated open source projects
+// Hardcoded array of open source projects
 export const projects: Project[] = [
   {
     id: 1,
@@ -37,25 +37,25 @@ export const projects: Project[] = [
   },
   {
     id: 4,
-    name: "Ollama",
-    description: "Get up and running with large language models locally on macOS, Linux, and Windows.",
-    domain: "AI/ML",
-    technologies: ["Go", "C++", "Python"],
+    name: "Express",
+    description: "Fast, unopinionated, minimalist web framework for Node.js applications.",
+    domain: "Backend",
+    technologies: ["JavaScript", "Node.js", "HTTP"],
     difficulty: "Beginner",
-    stars: 112000,
+    stars: 64000,
     beginnerFriendly: true,
-    githubUrl: "https://github.com/ollama/ollama"
+    githubUrl: "https://github.com/expressjs/express"
   },
   {
     id: 5,
-    name: "LangChain",
-    description: "Framework for building context-aware reasoning applications powered by LLMs.",
-    domain: "AI/ML",
-    technologies: ["Python", "TypeScript"],
-    difficulty: "Intermediate",
-    stars: 98000,
+    name: "Tailwind CSS",
+    description: "A utility-first CSS framework packed with classes that can be composed to build any design.",
+    domain: "Web Development",
+    technologies: ["CSS", "JavaScript", "PostCSS"],
+    difficulty: "Beginner",
+    stars: 84000,
     beginnerFriendly: true,
-    githubUrl: "https://github.com/langchain-ai/langchain"
+    githubUrl: "https://github.com/tailwindlabs/tailwindcss"
   },
   {
     id: 6,
@@ -103,23 +103,21 @@ export const projects: Project[] = [
   },
   {
     id: 10,
-    name: "Tauri",
-    description: "Build smaller, faster, and more secure desktop applications with web frontends and a Rust backend.",
-    domain: "Tools",
-    technologies: ["Rust", "TypeScript", "JavaScript"],
-    difficulty: "Advanced",
-    stars: 87000,
-    beginnerFriendly: false,
-    githubUrl: "https://github.com/tauri-apps/tauri"
+    name: "Redux Toolkit",
+    description: "The official, opinionated, batteries-included toolset for efficient Redux development.",
+    domain: "Web Development",
+    technologies: ["TypeScript", "Redux", "React"],
+    difficulty: "Beginner",
+    stars: 11000,
+    beginnerFriendly: true,
+    githubUrl: "https://github.com/reduxjs/redux-toolkit"
   }
 ];
 
-// Helper to find project by numeric ID
 export function getProjectById(id: number): Project | undefined {
   return projects.find((p) => p.id === id);
 }
 
-// Helper to format star counts nicely (e.g. 128000 -> 128k)
 export function formatStarCount(stars: number): string {
   if (stars >= 1000) {
     return `${(stars / 1000).toFixed(0)}k`;
