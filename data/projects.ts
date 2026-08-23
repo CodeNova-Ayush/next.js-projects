@@ -1,5 +1,6 @@
 import { Project } from '@/types/project';
 
+// Initial dataset of curated open source projects
 export const projects: Project[] = [
   {
     id: 1,
@@ -113,6 +114,15 @@ export const projects: Project[] = [
   }
 ];
 
+// Helper to find project by numeric ID
 export function getProjectById(id: number): Project | undefined {
   return projects.find((p) => p.id === id);
+}
+
+// Helper to format star counts nicely (e.g. 128000 -> 128k)
+export function formatStarCount(stars: number): string {
+  if (stars >= 1000) {
+    return `${(stars / 1000).toFixed(0)}k`;
+  }
+  return stars.toString();
 }
