@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Project } from '@/types/project';
 import { useBookmarks } from '@/context/BookmarkContext';
+import { formatStarCount } from '@/data/projects';
 
 interface ProjectCardProps {
   project: Project;
@@ -14,7 +15,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const saved = isBookmarked(project.id);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between">
       <div>
         {/* Top badges: Domain and Difficulty */}
         <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
@@ -22,12 +23,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
             {project.domain}
           </span>
           <span
-            className={`font-medium px-2 py-0.5 rounded ${
+            className={`font-medium px-2 py-0.5 rounded border ${
               project.difficulty === 'Beginner'
-                ? 'bg-green-100 text-green-800'
+                ? 'bg-green-50 text-green-700 border-green-200'
                 : project.difficulty === 'Intermediate'
-                ? 'bg-yellow-100 text-yellow-800'
-                : 'bg-red-100 text-red-800'
+                ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                : 'bg-red-50 text-red-700 border-red-200'
             }`}
           >
             {project.difficulty}
@@ -66,7 +67,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             )}
           </div>
           <div className="font-medium text-gray-600">
-            ★ {project.stars.toLocaleString()} stars
+            ★ {formatStarCount(project.stars)} stars
           </div>
         </div>
       </div>
@@ -88,7 +89,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
               : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
           }`}
         >
-          {saved ? 'Saved' : 'Save'}
+          {saved ? '✓ Saved' : 'Save'}
         </button>
       </div>
     </div>
